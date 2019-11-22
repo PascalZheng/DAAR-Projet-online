@@ -35,7 +35,6 @@ public class Jaccard {
 	}
 
 	public static Map<String, Long> liste(String filename) throws IOException {
-		
 		return Files.lines(Paths.get(filename), Charset.forName("ISO_8859_1")).map(String::toLowerCase)
 				.map(line -> line.split("[\\s,:;!?.]+")).flatMap(Arrays::stream).filter(s -> s.matches("[a-zA-z-']+"))
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -58,11 +57,10 @@ public class Jaccard {
 
 	public static void main(String[] args) throws IOException {
 		ArrayList<String> files = new ArrayList<>();
-		files.add("src/jaccard/test1");
-		files.add("src/jaccard/test2");
-		files.add("src/jaccard/test3");
-		files.add("src/jaccard/test4");
-		files.add("src/jaccard/test5");
+		files.add("src/files/s.txt");
+		files.add("src/files/u.txt");
+		files.add("src/files/v.txt");
+		files.add("src/files/w.txt");
 		
 		Map<String, Double> a = closenessCentrality(files);
 		for(String k  :  a.keySet()) {
@@ -70,8 +68,8 @@ public class Jaccard {
 		}
 
 //		System.out.println(distanceJaccard(
-//				liste("/Users/Thierno/Documents/Git/DAAR-Projet-online/Projet online/src/jaccard/test1"),
-//				liste("/Users/Thierno/Documents/Git/DAAR-Projet-online/Projet online/src/jaccard/bab2.txt")));
+//				liste("\\Users\\Thierno\\Documents\\Git\\DAAR-Projet-online\\Projet online\\src\\files\\w.txt"),
+//				liste("\\Users\\Thierno\\Documents\\Git\\DAAR-Projet-online\\Projet online\\src\\files\\s.txt")));
 
 	}
 }
