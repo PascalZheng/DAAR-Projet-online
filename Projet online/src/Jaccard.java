@@ -15,14 +15,18 @@ public class Jaccard {
 	public static double distanceJaccard(String f1, String f2) throws IOException {
 		Map<String, Long> D1 = liste(f1);
 		Map<String, Long> D2 = liste(f2);
+		
 		double sommeEnHaut = 0.0;
 		double sommeEnBas = 0.0;
+		
 		sommeEnHaut = D1.keySet().stream().filter(D2.keySet()::contains).collect(Collectors.toList()).stream()
 				.map(k -> Math.max(D1.get(k), D2.get(k)) - Math.min(D1.get(k), D2.get(k))).collect(Collectors.toList())
 				.stream().mapToLong(Long::longValue).sum();
+		
 		sommeEnBas = D1.keySet().stream().filter(D2.keySet()::contains).collect(Collectors.toList()).stream()
 				.map(k -> Math.max(D1.get(k), D2.get(k))).collect(Collectors.toList()).stream()
 				.mapToLong(Long::longValue).sum();
+		
 		return (sommeEnBas == 0 ? Long.MAX_VALUE : sommeEnHaut / sommeEnBas);
 	}
 

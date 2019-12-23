@@ -11,8 +11,6 @@ public class Closeness {
 		int V = jaccardMat.length;
 
 		double[][] res = new double[V][V];
-
-//		double[][] res = jaccardMat;
 		
 		for (int i = 0; i < V; i++)
 			for (int j = 0; j < V; j++)
