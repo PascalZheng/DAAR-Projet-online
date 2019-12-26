@@ -29,7 +29,6 @@ public class Graph {
 				}
 			}
 		}
-		System.out.println(adjArray);
 	}
 	
 	public HashSet<Integer> getNeighbor(Integer i){

@@ -1,3 +1,5 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -52,6 +54,10 @@ public class PageRank {
 	}
 	
 	public static void main(String[] args) throws IOException {
+		double ALPHA = 0.15;
+		int ITER = 20;
+		double TRESHOLD = 0.75;
+		
 		ArrayList<String> files = new ArrayList<>();
 
 		try (Stream<Path> paths = Files.walk(Paths.get("src/livres"))) {
@@ -63,22 +69,26 @@ public class PageRank {
 		
 		long startTime = System.currentTimeMillis();
 		
-		Graph G = new Graph(0.75, files);
+		Graph G = new Graph(TRESHOLD, files);
 		
-		PageRank pageRank = new PageRank(G, 0.15, 30);
+		PageRank pageRank = new PageRank(G, ALPHA, ITER);
 		
 		pageRank.compute();
 		
 		double[] res = pageRank.rank();
-		
 		long endTime = System.currentTimeMillis();
-		System.out.println("That took " + (endTime - startTime) + " milliseconds");
+		
+		
+		System.out.println("Page Rank : That took " + (endTime - startTime) + " milliseconds");
+		
+		BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/pagerank.txt"));
 		
 		int V = res.length;
 		for (int i = 0; i < V; i++) {
-			System.out.println(i + " : "+res[i]);
+			writer2.write(i + " : "+res[i]+"\n");
+			
 		}
-		
+		writer2.close();
 	}
 
 }

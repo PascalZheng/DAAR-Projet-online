@@ -45,7 +45,7 @@ public class Main {
 		long startTime = System.currentTimeMillis();
 		Map<Integer, Double> res = Closeness.closeness(Closeness.floydWarshall(Jaccard.jaccardMat(files)));
 		long endTime = System.currentTimeMillis();
-		System.out.println("That took " + (endTime - startTime) + " milliseconds");
+		System.out.println("Closeness : That took " + (endTime - startTime) + " milliseconds");
 		
 		for(Integer i : res.keySet()) {
 			writer2.write(i.intValue()+" "+res.get(i).doubleValue()+"\n");
