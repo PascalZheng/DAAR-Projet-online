@@ -85,7 +85,7 @@ public class PageRank {
 		
 		int V = res.length;
 		for (int i = 0; i < V; i++) {
-			writer2.write(i + " : "+res[i]+"\n");
+			writer2.write(i + " "+res[i]+"\n");
 			
 		}
 		writer2.close();
