@@ -1,0 +1,7 @@
+0 : bab1.txt
+1 : bab2.txt
+2 : blackfolk.txt
+3 : candide.txt
+4 : flower.txt
+5 : kama.txt
+6 : tomsawyer.txt

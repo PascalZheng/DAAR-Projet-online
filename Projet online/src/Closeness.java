@@ -7,7 +7,7 @@ import java.util.Map;
 public class Closeness {
 
 	public static double[][] floydWarshall(double[][] jaccardMat) {
-		System.out.println("floyd done");
+//		System.out.println("floyd done");
 		int V = jaccardMat.length;
 
 		double[][] res = new double[V][V];
@@ -24,13 +24,13 @@ public class Closeness {
 				}
 			}
 		}
-		System.out.println("floyd done");
+//		System.out.println("floyd done");
 		return res;
 
 	}
 	
 	public static Map<Integer, Double> closeness(double[][] floydWarshallMat ){
-		System.out.println("closeness start");
+//		System.out.println("closeness start");
 		int V = floydWarshallMat.length;
 		Map<Integer, Double> res = new HashMap<Integer, Double>();
 		
@@ -38,7 +38,7 @@ public class Closeness {
 			res.put(i, V/(Arrays.stream(floydWarshallMat[i]).sum()));
 		}
 		
-		System.out.println("closeness done");
+//		System.out.println("closeness done");
 		return res;
 	}
 

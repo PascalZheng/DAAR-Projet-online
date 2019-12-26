@@ -33,18 +33,18 @@ public class Jaccard {
 	// le filter double le temps d'execution
 	public static Map<String, Long> liste(String filename) throws IOException {
 		return Files.lines(Paths.get(filename), Charset.forName("ISO_8859_1")).map(String::toLowerCase)
-				.map(line -> line.split("[\\s,:;!?.]+")).flatMap(Arrays::stream).filter(s -> s.matches("[a-zA-z-']+")) // s.matches("[A-Za-z'àáâãäåçèéêëìíîïðòóôõöùúûüýÿ'-]+"
+				.map(line -> line.split("[\\s,:;!?.]+")).flatMap(Arrays::stream).filter(s -> s.matches("[a-zA-Z-']+")) 
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 	}
 	
 	
 	public static double[][] jaccardMat(ArrayList<String> files) throws IOException{
-		System.out.println("jaccard Mat start");
+//		System.out.println("jaccard Mat start");
 		double[][] res = new double[files.size()][files.size()];
 		int n = res.length;
 		
 		for(int i=0; i<n; i++) {
-			System.out.println(i);
+//			System.out.println(i);
 			for(int j=0;j<n;j++) {
 				if(i==j) {
 					res[i][j] = 0.0;
@@ -55,7 +55,7 @@ public class Jaccard {
 				
 			}
 		}
-		System.out.println("jaccard Mat done");
+//		System.out.println("jaccard Mat done");
 		return res;
 	}
 	
