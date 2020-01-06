@@ -92,18 +92,16 @@ public class Graph {
 	public void saveGraph(String filename) {
 		try {
 			BufferedWriter writer2 = new BufferedWriter(new FileWriter(filename));
+			String r = "";
 			for (Integer i : adjArray.keySet()) {
-				writer2.write(i.toString());
-				adjArray.get(i).stream().forEach(v -> {
-					try {
-						writer2.write(" " + v);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				});
-				writer2.write("\n");
+				r = i.toString();
+				for (Integer v : adjArray.get(i)) {
+					r += " " + v.toString();
+				}
+				r += "\n";
+				writer2.write(r);
+				r = "";
 			}
-
 			writer2.close();
 		} catch (IOException e) {
 			e.printStackTrace();
