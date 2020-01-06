@@ -70,6 +70,7 @@ public class PageRank {
 		long startTime = System.currentTimeMillis();
 		
 		Graph G = new Graph(TRESHOLD, files);
+		G.saveGraph("src/centrality/graph.txt");
 		
 		PageRank pageRank = new PageRank(G, ALPHA, ITER);
 		
