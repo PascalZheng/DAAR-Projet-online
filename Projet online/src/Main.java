@@ -5,7 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
@@ -24,7 +29,7 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		double ALPHA = 0.15;
-		int ITER = 25;
+		int ITER = 30;
 		double TRESHOLD = 0.75;
 		ArrayList<String> files = new ArrayList<>();
 
@@ -76,6 +81,69 @@ public class Main {
 
 		}
 		writer2.close();
+		suggestionPageRank(G, pagerank);
+		suggestionCloseness(G, closeness);
+	}
+
+	public static void suggestionPageRank(Graph g, double[] pagerank)  {
+		ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+
+		g.getAdjArray().keySet().stream().forEach(n -> {
+			res.add((ArrayList<Integer>) g.getNeighbor(n).stream().map(v -> {
+				return new Paire(v, pagerank[v]);
+			}).collect(Collectors.toList()).stream().sorted(Comparator.comparingDouble(Paire::getScore).reversed())
+					.limit(5).map(p -> {
+						return p.getId();
+					}).collect(Collectors.toList()));
+		});
+
+		try {
+			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/suggest_pagerank.txt"));
+			String r = "";
+			for(int i=0; i<res.size();i++) {
+				r = String.valueOf(i);
+				for (Integer v : res.get(i)) {
+					r += " " + v.toString();
+				}
+				r += "\n";
+				writer2.write(r);
+				r = "";
+			}
+			writer2.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void suggestionCloseness(Graph g, Map<Integer, Double> closeness) {
+
+		ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+
+		g.getAdjArray().keySet().stream().forEach(n -> {
+			res.add((ArrayList<Integer>) g.getNeighbor(n).stream().map(v -> {
+				return new Paire(v, closeness.get(v));
+			}).collect(Collectors.toList()).stream().sorted(Comparator.comparingDouble(Paire::getScore).reversed())
+					.limit(5).map(p -> {
+						return p.getId();
+					}).collect(Collectors.toList()));
+		});
+
+		try {
+			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/suggest_closeness.txt"));
+			String r = "";
+			for(int i=0; i<res.size();i++) {
+				r = String.valueOf(i);
+				for (Integer v : res.get(i)) {
+					r += " " + v.toString();
+				}
+				r += "\n";
+				writer2.write(r);
+				r = "";
+			}
+			writer2.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
