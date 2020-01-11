@@ -39,7 +39,7 @@ public class Main {
 			paths.filter(Files::isRegularFile).forEach(f -> {
 				files.add(f.toString());
 				try {
-					writer.write(files.size() - 1 + " : " + f.toString().split("\\\\")[2] + "\n");
+					writer.write(files.size() - 1 + " " + f.toString().split("\\\\")[2] + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
