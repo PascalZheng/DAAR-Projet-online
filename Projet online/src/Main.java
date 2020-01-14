@@ -31,7 +31,7 @@ public class Main {
 		ArrayList<String> files = new ArrayList<>();
 		ArrayList<String> files_pretraiter = new ArrayList<>();
 
-		BufferedWriter writer = new BufferedWriter(new FileWriter("src/centrality_parra/id_node.txt"));
+		BufferedWriter writer = new BufferedWriter(new FileWriter("src/centrality/id_node.txt"));
 
 		try (Stream<Path> paths = Files.walk(Paths.get("src/livres/"))) {
 			paths.filter(Files::isRegularFile).limit(1664).forEach(f -> {
@@ -55,7 +55,7 @@ public class Main {
 		System.out.println("Graph creation : That took " + (endTime - startTime) + " milliseconds");
 		G.saveGraph("src/centrality/graph.txt");
 
-		BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality_parra/closeness.txt"));
+		BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/closeness.txt"));
 
 		startTime = System.currentTimeMillis();
 		Map<Integer, Double> closeness = Closeness.closeness(G.floydWarshalMat(Jaccard.jaccardMat(files_pretraiter)));
@@ -67,7 +67,8 @@ public class Main {
 		}
 		writer2.close();
 
-		/*startTime = System.currentTimeMillis();
+		////
+		startTime = System.currentTimeMillis();
 		PageRank pageRank = new PageRank(G, ALPHA, ITER);
 		pageRank.compute();
 		endTime = System.currentTimeMillis();
@@ -83,7 +84,8 @@ public class Main {
 
 		}
 		writer2.close();
-		suggestionPageRank(G, pagerank);*/
+		suggestionPageRank(G, pagerank);
+		///
 		suggestionCloseness(G, closeness);
 		
 		
@@ -102,7 +104,7 @@ public class Main {
 		});
 
 		try {
-			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality_parra/suggest_pagerank.txt"));
+			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/suggest_pagerank.txt"));
 			String r = "";
 			for(int i=0; i<res.size();i++) {
 				r = String.valueOf(i);
