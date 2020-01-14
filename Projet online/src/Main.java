@@ -29,23 +29,28 @@ public class Main {
 		int ITER = 30;
 		double TRESHOLD = 0.75;
 		ArrayList<String> files = new ArrayList<>();
+		ArrayList<String> files_pretraiter = new ArrayList<>();
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter("src/centrality_parra/id_node.txt"));
 
-		try (Stream<Path> paths = Files.walk(Paths.get("/Vrac/books_daar"))) {
+		try (Stream<Path> paths = Files.walk(Paths.get("src/livres/"))) {
 			paths.filter(Files::isRegularFile).limit(1664).forEach(f -> {
 				files.add(f.toString());
+				files_pretraiter.add(f.toString().replace("livres","livres_pretraiter"));
 				try {
-					writer.write(files.size() - 1 + " " + f.toString().split("/")[3] + "\n");
+					
+					writer.write(files.size() - 1 + " " + f.toString().split("\\\\")[2] + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			});
 		}
 		writer.close();
+		
+		Jaccard.occurences(files);
 
 		long startTime = System.currentTimeMillis();
-		Graph G = new Graph(TRESHOLD, files);
+		Graph G = new Graph(TRESHOLD, files_pretraiter);
 		long endTime = System.currentTimeMillis();
 		System.out.println("Graph creation : That took " + (endTime - startTime) + " milliseconds");
 		G.saveGraph("src/centrality/graph.txt");
@@ -53,10 +58,10 @@ public class Main {
 		BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality_parra/closeness.txt"));
 
 		startTime = System.currentTimeMillis();
-		Map<Integer, Double> closeness = Closeness.closeness(G.floydWarshalMat(Jaccard.jaccardMat(files)));
+		Map<Integer, Double> closeness = Closeness.closeness(G.floydWarshalMat(Jaccard.jaccardMat(files_pretraiter)));
 		endTime = System.currentTimeMillis();
 		System.out.println("Closeness : That took " + (endTime - startTime) + " milliseconds");
-
+		
 		for (Integer i : closeness.keySet()) {
 			writer2.write(i.intValue() + " " + closeness.get(i).doubleValue() + "\n");
 		}
@@ -80,6 +85,8 @@ public class Main {
 		writer2.close();
 		suggestionPageRank(G, pagerank);*/
 		suggestionCloseness(G, closeness);
+		
+		
 	}
 
 	public static void suggestionPageRank(Graph g, double[] pagerank)  {

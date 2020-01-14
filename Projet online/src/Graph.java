@@ -51,9 +51,8 @@ public class Graph {
 				}
 				if (getNeighbor(i).contains(j)) {
 					dist[i][j] = jaccardMat[i][j];
-
 				} else {
-					dist[i][j] = Double.POSITIVE_INFINITY;
+					dist[i][j] = 1.0;
 				}
 				paths[i][j] = j;
 			}
