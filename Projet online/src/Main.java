@@ -5,10 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,13 +30,13 @@ public class Main {
 		double TRESHOLD = 0.75;
 		ArrayList<String> files = new ArrayList<>();
 
-		BufferedWriter writer = new BufferedWriter(new FileWriter("src/centrality/id_node.txt"));
+		BufferedWriter writer = new BufferedWriter(new FileWriter("src/centrality_parra/id_node.txt"));
 
-		try (Stream<Path> paths = Files.walk(Paths.get("src/livres"))) {
-			paths.filter(Files::isRegularFile).forEach(f -> {
+		try (Stream<Path> paths = Files.walk(Paths.get("/Vrac/books_daar"))) {
+			paths.filter(Files::isRegularFile).limit(1664).forEach(f -> {
 				files.add(f.toString());
 				try {
-					writer.write(files.size() - 1 + " " + f.toString().split("\\\\")[2] + "\n");
+					writer.write(files.size() - 1 + " " + f.toString().split("/")[3] + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -53,7 +50,7 @@ public class Main {
 		System.out.println("Graph creation : That took " + (endTime - startTime) + " milliseconds");
 		G.saveGraph("src/centrality/graph.txt");
 
-		BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/closeness.txt"));
+		BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality_parra/closeness.txt"));
 
 		startTime = System.currentTimeMillis();
 		Map<Integer, Double> closeness = Closeness.closeness(G.floydWarshalMat(Jaccard.jaccardMat(files)));
@@ -65,7 +62,7 @@ public class Main {
 		}
 		writer2.close();
 
-		startTime = System.currentTimeMillis();
+		/*startTime = System.currentTimeMillis();
 		PageRank pageRank = new PageRank(G, ALPHA, ITER);
 		pageRank.compute();
 		endTime = System.currentTimeMillis();
@@ -81,7 +78,7 @@ public class Main {
 
 		}
 		writer2.close();
-		suggestionPageRank(G, pagerank);
+		suggestionPageRank(G, pagerank);*/
 		suggestionCloseness(G, closeness);
 	}
 
@@ -98,7 +95,7 @@ public class Main {
 		});
 
 		try {
-			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/suggest_pagerank.txt"));
+			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality_parra/suggest_pagerank.txt"));
 			String r = "";
 			for(int i=0; i<res.size();i++) {
 				r = String.valueOf(i);

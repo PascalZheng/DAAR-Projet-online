@@ -22,6 +22,7 @@ public class Graph {
 		}
 
 		for (int i = 0; i < n; i++) {
+			System.out.println(i);
 			for (int j = 0; j < n; j++) {
 				if (i != j) {
 					if (Jaccard.distanceJaccard(files.get(i), files.get(j)) <= this.edgeTreshold) {

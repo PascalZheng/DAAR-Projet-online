@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Jaccard {
 	
@@ -18,22 +19,27 @@ public class Jaccard {
 		
 		double sommeEnHaut = 0.0;
 		double sommeEnBas = 0.0;
-		
-		sommeEnHaut = D1.keySet().stream().filter(D2.keySet()::contains).collect(Collectors.toList()).stream()
-				.map(k -> Math.max(D1.get(k), D2.get(k)) - Math.min(D1.get(k), D2.get(k))).collect(Collectors.toList())
+
+		sommeEnHaut = D1.keySet().stream().collect(Collectors.toList()).stream().parallel().map(
+				k -> D2.get(k) != null ? Math.max(D1.get(k), D2.get(k)) - Math.min(D1.get(k), D2.get(k)) : D1.get(k))
+				.collect(Collectors.toList()).stream().mapToLong(Long::longValue).sum();
+
+		sommeEnHaut += D2.keySet().stream().filter(k -> !D1.containsKey(k)).collect(Collectors.toList()).stream().parallel()
+				.map(k -> D2.get(k)).collect(Collectors.toList()).stream().mapToLong(Long::longValue).sum();
+
+		sommeEnBas = D1.keySet().stream().collect(Collectors.toList()).stream().parallel()
+				.map(k -> D2.get(k) != null ? Math.max(D1.get(k), D2.get(k)) : D1.get(k)).collect(Collectors.toList())
 				.stream().mapToLong(Long::longValue).sum();
-		
-		sommeEnBas = D1.keySet().stream().filter(D2.keySet()::contains).collect(Collectors.toList()).stream()
-				.map(k -> Math.max(D1.get(k), D2.get(k))).collect(Collectors.toList()).stream()
-				.mapToLong(Long::longValue).sum();
-		
-		return (sommeEnBas == 0 ? Long.MAX_VALUE : sommeEnHaut / sommeEnBas);
+
+		sommeEnBas += D2.keySet().stream().filter(k -> !D1.containsKey(k)).collect(Collectors.toList()).stream().parallel()
+				.map(k -> D2.get(k)).collect(Collectors.toList()).stream().mapToLong(Long::longValue).sum();
+
+		return (sommeEnBas == 0 ? 1.0 : sommeEnHaut / sommeEnBas);
 	}
 
 	// le filter double le temps d'execution
 	public static Map<String, Long> liste(String filename) throws IOException {
-		return Files.lines(Paths.get(filename), Charset.forName("ISO_8859_1")).map(String::toLowerCase)
-				.map(line -> line.split("[\\s,:;!?.]+")).flatMap(Arrays::stream).filter(s -> s.matches("[a-zA-Z-']+")) 
+		return Stream.of(Files.lines(Paths.get(filename), Charset.forName("ISO_8859_1"))).flatMap(s->s).map(String::toLowerCase).parallel().map(line -> line.split("[\\s,:;!?.]+")).flatMap(Arrays::stream).filter(s -> s.matches("[a-zA-Z-']+")) 
 				.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 	}
 	
