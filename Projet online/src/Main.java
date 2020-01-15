@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,29 +29,33 @@ public class Main {
 		double ALPHA = 0.15;
 		int ITER = 30;
 		double TRESHOLD = 0.75;
+		
 		ArrayList<String> files = new ArrayList<>();
 		ArrayList<String> files_pretraiter = new ArrayList<>();
+		List<Livre> livres = new ArrayList<>();
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter("src/centrality/id_node.txt"));
 
 		try (Stream<Path> paths = Files.walk(Paths.get("src/livres/"))) {
 			paths.filter(Files::isRegularFile).limit(1664).forEach(f -> {
 				files.add(f.toString());
-				files_pretraiter.add(f.toString().replace("livres","livres_pretraiter"));
+				files_pretraiter.add(f.toString().replace("livres", "livres_pretraiter"));
 				try {
-					
 					writer.write(files.size() - 1 + " " + f.toString().split("\\\\")[2] + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			});
 		}
+
 		writer.close();
-		
-		Jaccard.occurences(files);
+
+		Livre.occurences(files, "livres_pretraiter");
+
+		livres = files_pretraiter.stream().parallel().map(f -> new Livre(f)).collect(Collectors.toList());
 
 		long startTime = System.currentTimeMillis();
-		Graph G = new Graph(TRESHOLD, files_pretraiter);
+		Graph G = new Graph(TRESHOLD, livres);
 		long endTime = System.currentTimeMillis();
 		System.out.println("Graph creation : That took " + (endTime - startTime) + " milliseconds");
 		G.saveGraph("src/centrality/graph.txt");
@@ -58,10 +63,10 @@ public class Main {
 		BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/closeness.txt"));
 
 		startTime = System.currentTimeMillis();
-		Map<Integer, Double> closeness = Closeness.closeness(G.floydWarshalMat(Jaccard.jaccardMat(files_pretraiter)));
+		Map<Integer, Double> closeness = Closeness.closeness(G.floydWarshalMat(Jaccard.jaccardMat(livres)));
 		endTime = System.currentTimeMillis();
 		System.out.println("Closeness : That took " + (endTime - startTime) + " milliseconds");
-		
+
 		for (Integer i : closeness.keySet()) {
 			writer2.write(i.intValue() + " " + closeness.get(i).doubleValue() + "\n");
 		}
@@ -87,11 +92,10 @@ public class Main {
 		suggestionPageRank(G, pagerank);
 		///
 		suggestionCloseness(G, closeness);
-		
-		
+
 	}
 
-	public static void suggestionPageRank(Graph g, double[] pagerank)  {
+	public static void suggestionPageRank(Graph g, double[] pagerank) {
 		ArrayList<ArrayList<Integer>> res = new ArrayList<>();
 
 		g.getAdjArray().keySet().stream().forEach(n -> {
@@ -106,7 +110,7 @@ public class Main {
 		try {
 			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/suggest_pagerank.txt"));
 			String r = "";
-			for(int i=0; i<res.size();i++) {
+			for (int i = 0; i < res.size(); i++) {
 				r = String.valueOf(i);
 				for (Integer v : res.get(i)) {
 					r += " " + v.toString();
@@ -137,7 +141,7 @@ public class Main {
 		try {
 			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/suggest_closeness.txt"));
 			String r = "";
-			for(int i=0; i<res.size();i++) {
+			for (int i = 0; i < res.size(); i++) {
 				r = String.valueOf(i);
 				for (Integer v : res.get(i)) {
 					r += " " + v.toString();

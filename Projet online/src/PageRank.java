@@ -1,13 +1,5 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class PageRank {
 	private Graph G;
@@ -27,7 +19,7 @@ public class PageRank {
 		this.I = new double[n];
 		this.P = new double[n];
 		this.tmpP = new double[n];
-		IntStream.range(0, G.size()).forEach(i -> {I[i] = 1/n;P[i] = 1/n;tmpP[i] = 1/n;});
+		IntStream.range(0, G.size()).parallel().forEach(i -> {I[i] = 1/n;P[i] = 1/n;tmpP[i] = 1/n;});
 	}
 	
 	public void adjVectProd(Graph G, double[] T, double[] P) {
@@ -53,43 +45,5 @@ public class PageRank {
 		return this.P;
 	}
 	
-	public static void main(String[] args) throws IOException {
-		double ALPHA = 0.15;
-		int ITER = 20;
-		double TRESHOLD = 0.75;
-		
-		ArrayList<String> files = new ArrayList<>();
-
-		try (Stream<Path> paths = Files.walk(Paths.get("src/livres"))) {
-			paths.filter(Files::isRegularFile).forEach(f -> {
-				files.add(f.toString());
-				
-			});
-		}
-		
-		long startTime = System.currentTimeMillis();
-		
-		Graph G = new Graph(TRESHOLD, files);
-		G.saveGraph("src/centrality/graph.txt");
-		
-		PageRank pageRank = new PageRank(G, ALPHA, ITER);
-		
-		pageRank.compute();
-		
-		double[] res = pageRank.rank();
-		long endTime = System.currentTimeMillis();
-		
-		
-		System.out.println("Page Rank : That took " + (endTime - startTime) + " milliseconds");
-		
-		BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/pagerank.txt"));
-		
-		int V = res.length;
-		for (int i = 0; i < V; i++) {
-			writer2.write(i + " "+res[i]+"\n");
-			
-		}
-		writer2.close();
-	}
 
 }
