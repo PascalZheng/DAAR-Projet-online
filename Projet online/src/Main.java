@@ -29,6 +29,9 @@ public class Main {
 		double ALPHA = 0.15;
 		int ITER = 30;
 		double TRESHOLD = 0.75;
+		int NB_LIVRE = 1664;
+		String fileSources = "src/livres";
+		String fileSourcesVrac = "/Vrac/livres";
 		
 		ArrayList<String> files = new ArrayList<>();
 		ArrayList<String> files_pretraiter = new ArrayList<>();
@@ -36,12 +39,12 @@ public class Main {
 
 		BufferedWriter writer = new BufferedWriter(new FileWriter("src/centrality/id_node.txt"));
 
-		try (Stream<Path> paths = Files.walk(Paths.get("src/livres/"))) {
-			paths.filter(Files::isRegularFile).limit(1664).forEach(f -> {
+		try (Stream<Path> paths = Files.walk(Paths.get(fileSourcesVrac))) {
+			paths.filter(Files::isRegularFile).limit(NB_LIVRE).forEach(f -> {
 				files.add(f.toString());
 				files_pretraiter.add(f.toString().replace("livres", "livres_pretraiter"));
 				try {
-					writer.write(files.size() - 1 + " " + f.toString().split("\\\\")[2] + "\n");
+					writer.write(files.size() - 1 + " " + f.toString().split("/")[3] + "\n");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
