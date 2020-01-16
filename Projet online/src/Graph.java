@@ -10,78 +10,55 @@ import java.util.stream.IntStream;
 public class Graph {
 	private double edgeTreshold;
 	private Map<Integer, HashSet<Integer>> adjArray;
-	double[][] jaccardMat;
+	private double[][] jaccardMat;
 
 	public Graph(double edgeThreshold, List<Livre> files) throws IOException {
 		this.edgeTreshold = edgeThreshold;
 		int n = files.size();
 		adjArray = new HashMap<>();
 		jaccardMat = new double[files.size()][files.size()];
-		
+
 		IntStream.range(0, n).forEach(i -> {
 			adjArray.put(i, new HashSet<Integer>());
 		});
-		
+
 		IntStream.range(0, n).parallel().forEach(i -> {
 			IntStream.range(0, n).parallel().forEach(j -> {
 				double distJacc = 1.0;
 				try {
-					if(i == j) {
+					if (i == j) {
 						distJacc = 0.0;
-					}else {
+					} else {
 						distJacc = Jaccard.distanceJaccard(files.get(i), files.get(j));
 					}
 					jaccardMat[i][j] = distJacc;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				if (distJacc <= this.edgeTreshold) {
+				if (distJacc <= this.edgeTreshold && i != j) {
 					adjArray.get(i).add(j);
 					adjArray.get(j).add(i);
 				}
 			});
 		});
-		
-		
-		/*for (int i = 0; i < n; i++) {
-			adjArray.put(i, new HashSet<Integer>());
-		}
-
-		for (int i = 0; i < n; i++) {
-			System.out.println(i);
-			for (int j = 0; j < n; j++) {
-				if (i != j) {
-					if (Jaccard.distanceJaccard(files.get(i), files.get(j)) <= this.edgeTreshold) {
-						adjArray.get(i).add(j);
-						adjArray.get(j).add(i);
-					}
-				}
-			}
-		}*/
 	}
 
 	public double[][] floydWarshalMat() {
 		int n = this.adjArray.keySet().size();
 		int[][] paths = new int[n][n];
 		double[][] dist = new double[n][n];
-		
+
 		IntStream.range(0, n).forEach(i -> {
 			IntStream.range(0, n).forEach(j -> {
 				paths[i][j] = i;
 			});
 		});
 
-		/*for (int i = 0; i < paths.length; i++)
-			for (int j = 0; j < paths.length; j++)
-				paths[i][j] = i;
-		 */
-		
 		IntStream.range(0, n).parallel().forEach(i -> {
 			IntStream.range(0, n).parallel().forEach(j -> {
 				if (i == j) {
 					dist[i][i] = 0.0;
-				}
-				else {
+				} else {
 					if (getNeighbor(i).contains(j)) {
 						dist[i][j] = jaccardMat[i][j];
 					} else {
@@ -89,25 +66,10 @@ public class Graph {
 					}
 					paths[i][j] = j;
 				}
-				
+
 			});
 		});
-		
-		/*for (int i = 0; i < paths.length; i++) {
-			for (int j = 0; j < paths.length; j++) {
-				if (i == j) {
-					dist[i][i] = 0.0;
-					continue;
-				}
-				if (getNeighbor(i).contains(j)) {
-					dist[i][j] = jaccardMat[i][j];
-				} else {
-					dist[i][j] = 1.0;
-				}
-				paths[i][j] = j;
-			}
-		}*/
-		
+
 		IntStream.range(0, n).parallel().forEach(k -> {
 			IntStream.range(0, n).parallel().forEach(i -> {
 				IntStream.range(0, n).parallel().forEach(j -> {
@@ -115,23 +77,11 @@ public class Graph {
 						dist[i][j] = dist[i][k] + dist[k][j];
 						paths[i][j] = paths[i][k];
 					}
-					
+
 				});
-				
+
 			});
 		});
-
-		/*for (int k = 0; k < paths.length; k++) {
-			for (int i = 0; i < paths.length; i++) {
-				for (int j = 0; j < paths.length; j++) {
-					if (dist[i][j] > dist[i][k] + dist[k][j]) {
-						dist[i][j] = dist[i][k] + dist[k][j];
-						paths[i][j] = paths[i][k];
-
-					}
-				}
-			}
-		}*/
 
 		return dist;
 	}
@@ -142,6 +92,14 @@ public class Graph {
 
 	public Map<Integer, HashSet<Integer>> getAdjArray() {
 		return adjArray;
+	}
+
+	public double[][] getJaccardMat() {
+		return jaccardMat;
+	}
+
+	public void setJaccardMat(double[][] jaccardMat) {
+		this.jaccardMat = jaccardMat;
 	}
 
 	public int getDegreeNode(Integer i) {

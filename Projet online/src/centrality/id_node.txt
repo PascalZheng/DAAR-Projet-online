@@ -1,26 +1,26 @@
-0 SleepyHollow.txt
-1 LONDON CLUBS.txt
-2 candide.txt
-3 Les NaufragÃ©s.txt
-4 bab2.txt
+0 Anthem.txt
+1 Arthur.txt
+2 bab1.txt
+3 bab2.txt
+4 Beowulf.txt
 5 BeyondGoodAndEvil.txt
-6 L'art de la guerre.txt
-7 tomsawyer.txt
+6 blackfolk.txt
+7 candide.txt
 8 Dante.txt
-9 Arthur.txt
-10 The Mystery of Suicide Place.txt
-11 Faustus.txt
-12 bab1.txt
-13 Peter Pan.txt
-14 blackfolk.txt
-15 flower.txt
-16 Gulliver.txt
-17 Anthem.txt
-18 Beowulf.txt
-19 SongsInnocenceExperience.txt
-20 Huckleberry.txt
-21 TimeMachine.txt
-22 Iliad.txt
-23 Dunwich.txt
-24 Germinal.txt
-25 kama.txt
+9 Dunwich.txt
+10 Faustus.txt
+11 flower.txt
+12 Germinal.txt
+13 Gulliver.txt
+14 Huckleberry.txt
+15 Iliad.txt
+16 kama.txt
+17 L'art de la guerre.txt
+18 Les Naufragés.txt
+19 LONDON CLUBS.txt
+20 Peter Pan.txt
+21 SleepyHollow.txt
+22 SongsInnocenceExperience.txt
+23 The Mystery of Suicide Place.txt
+24 TimeMachine.txt
+25 tomsawyer.txt

@@ -44,27 +44,22 @@ public class Livre {
 	}
 
 	public static Map<String, Double> liste(String filename) throws IOException {
-		return Stream.of(Files.lines(Paths.get(filename), Charset.forName("ISO_8859_1")))
-				.flatMap(s -> s).parallel()
-				.map(String::toLowerCase).parallel()
-				.map(line -> line.split(" ")).parallel()
+		return Stream.of(Files.lines(Paths.get(filename), Charset.forName("ISO_8859_1"))).flatMap(s -> s).parallel()
+				.map(String::toLowerCase).parallel().map(line -> line.split(" ")).parallel()
 				.collect(Collectors.toMap(p -> (String) p[0], p -> Double.parseDouble((String) p[1])));
 
 	}
 
-	public static void occurences(ArrayList<String> files, String folder) {
-		files.stream().parallel()
-		.forEach(file -> {
+	public static void occurences(ArrayList<String> files, String folderSrc,String folderDest) {
+		files.stream().parallel().forEach(file -> {
 			try {
 				Map<String, Long> res = Stream.of(Files.lines(Paths.get(file), Charset.forName("ISO_8859_1")))
-						.flatMap(s -> s).parallel()
-						.map(String::toLowerCase).parallel()
-						.map(line -> line.split("[\\s,:;!?.]+")).parallel()
-						.flatMap(Arrays::stream).parallel()
+						.flatMap(s -> s).parallel().map(String::toLowerCase).parallel()
+						.map(line -> line.split("[\\s,:;!?.]+")).parallel().flatMap(Arrays::stream).parallel()
 						.filter(s -> s.matches("[a-zA-Z-']+")).parallel()
 						.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
-				BufferedWriter writer2 = new BufferedWriter(new FileWriter(file.replace("livres", folder)));
+				BufferedWriter writer2 = new BufferedWriter(new FileWriter(file.replace(folderSrc, folderDest)));
 				for (String mot : res.keySet()) {
 					writer2.write(mot + " " + res.get(mot).doubleValue() + "\n");
 				}
