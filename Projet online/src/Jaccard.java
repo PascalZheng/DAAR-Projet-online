@@ -1,8 +1,6 @@
 
 import java.io.IOException;
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class Jaccard {
 
@@ -44,34 +42,6 @@ public class Jaccard {
 		return (sommeEnBas == 0 ? 1.0 : sommeEnHaut / sommeEnBas);
 	}
 
-	public static double[][] jaccardMat(List<Livre> files) /*throws IOException*/ {
-		double[][] res = new double[files.size()][files.size()];
-		int n = res.length;
-		IntStream.range(0, n).parallel().forEach(i -> {
-			IntStream.range(0, n).parallel().forEach(j -> {
-				if (i == j) {
-					res[i][j] = 0.0;
-				} else {
-					try {
-						res[i][j] = distanceJaccard(files.get(i), files.get(j));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-		});
-
-		/*for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				if (i == j) {
-					res[i][j] = 0.0;
-				} else {
-					res[i][j] = distanceJaccard(files.get(i), files.get(j));
-				}
-			}
-		}*/
-		
-		return res;
-	}
+	
 
 }

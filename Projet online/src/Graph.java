@@ -10,11 +10,13 @@ import java.util.stream.IntStream;
 public class Graph {
 	private double edgeTreshold;
 	private Map<Integer, HashSet<Integer>> adjArray;
+	double[][] jaccardMat;
 
 	public Graph(double edgeThreshold, List<Livre> files) throws IOException {
 		this.edgeTreshold = edgeThreshold;
 		int n = files.size();
 		adjArray = new HashMap<>();
+		jaccardMat = new double[files.size()][files.size()];
 		
 		IntStream.range(0, n).forEach(i -> {
 			adjArray.put(i, new HashSet<Integer>());
@@ -24,7 +26,12 @@ public class Graph {
 			IntStream.range(0, n).parallel().forEach(j -> {
 				double distJacc = 1.0;
 				try {
-					distJacc = Jaccard.distanceJaccard(files.get(i), files.get(j));
+					if(i == j) {
+						distJacc = 0.0;
+					}else {
+						distJacc = Jaccard.distanceJaccard(files.get(i), files.get(j));
+					}
+					jaccardMat[i][j] = distJacc;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -53,7 +60,7 @@ public class Graph {
 		}*/
 	}
 
-	public double[][] floydWarshalMat(double[][] jaccardMat) {
+	public double[][] floydWarshalMat() {
 		int n = this.adjArray.keySet().size();
 		int[][] paths = new int[n][n];
 		double[][] dist = new double[n][n];

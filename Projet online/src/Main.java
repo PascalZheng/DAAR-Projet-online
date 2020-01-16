@@ -9,21 +9,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Main {
 
-	public static void printMatrice(double[][] dist) {
-		int V = dist.length;
-
-		for (int i = 0; i < V; i++) {
-			System.out.print(i + " : ");
-			for (int j = 0; j < V; j++) {
-				System.out.print(dist[i][j] + "\t");
-			}
-			System.out.print("\n");
-		}
-	}
 
 	public static void main(String[] args) throws IOException {
 		double ALPHA = 0.15;
@@ -37,26 +27,33 @@ public class Main {
 		ArrayList<String> files_pretraiter = new ArrayList<>();
 		List<Livre> livres = new ArrayList<>();
 
-		BufferedWriter writer = new BufferedWriter(new FileWriter("src/centrality/id_node.txt"));
+		
 
-		try (Stream<Path> paths = Files.walk(Paths.get(fileSourcesVrac))) {
-			paths.filter(Files::isRegularFile).limit(NB_LIVRE).forEach(f -> {
+		try (Stream<Path> paths = Files.walk(Paths.get(fileSources))) {
+			paths.filter(Files::isRegularFile).parallel().limit(NB_LIVRE).forEach(f -> {
 				files.add(f.toString());
 				files_pretraiter.add(f.toString().replace("livres", "livres_pretraiter"));
-				try {
-					writer.write(files.size() - 1 + " " + f.toString().split("/")[3] + "\n");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 			});
 		}
 
-		writer.close();
-
+		
 		Livre.occurences(files, "livres_pretraiter");
 
-		livres = files_pretraiter.stream().parallel().map(f -> new Livre(f)).collect(Collectors.toList());
-
+		livres = files_pretraiter.stream().map(f -> new Livre(f)).collect(Collectors.toList());
+		
+		BufferedWriter writer = new BufferedWriter(new FileWriter("src/centrality/id_node.txt"));
+		
+		for(int id =0; id<livres.size();id++) {
+			try {
+				writer.write(id + " " + livres.get(id).getName().toString().split("/")[2] + "\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		};
+		
+		
+		writer.close();
+		
 		long startTime = System.currentTimeMillis();
 		Graph G = new Graph(TRESHOLD, livres);
 		long endTime = System.currentTimeMillis();
@@ -66,7 +63,7 @@ public class Main {
 		BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/closeness.txt"));
 
 		startTime = System.currentTimeMillis();
-		Map<Integer, Double> closeness = Closeness.closeness(G.floydWarshalMat(Jaccard.jaccardMat(livres)));
+		Map<Integer, Double> closeness = Closeness.closeness(G.floydWarshalMat());
 		endTime = System.currentTimeMillis();
 		System.out.println("Closeness : That took " + (endTime - startTime) + " milliseconds");
 
