@@ -1,0 +1,3 @@
+Graph creation : That took 2954341 milliseconds
+Closeness : That took 14520 milliseconds
+Page Rank : That took 2649 milliseconds
