@@ -1,5 +1,8 @@
 package algorithme;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,16 +20,16 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		double ALPHA = 0.15;
 		int ITER = 30;
-		double TRESHOLD = 0.75;
+		double TRESHOLD = 0.63;
 		int NB_LIVRE = 1664;
 
-		String grapheFile = "src/centrality/graph.txt";
-		String centralityIdNodeFile = "src/centrality/id_node.txt";
-		String centralityClosenessFile = "src/centrality/closeness.txt";
-		String centralityPageRankFile = "src/centrality/pagerank.txt";
-		String suggestClosenessFile = "src/centrality/suggest_closeness.txt";
-		String suggestPageRankFile = "src/centrality/suggest_pagerank.txt";
-		String suggestJaccardFile = "src/centrality/suggest_jaccard.txt";
+		String grapheFile = "src/centrality2/graph.txt";
+		String centralityIdNodeFile = "src/centrality2/id_node.txt";
+		String centralityClosenessFile = "src/centrality2/closeness.txt";
+		String centralityPageRankFile = "src/centrality2/pagerank.txt";
+		String suggestClosenessFile = "src/centrality2/suggest_closeness.txt";
+		String suggestPageRankFile = "src/centrality2/suggest_pagerank.txt";
+		String suggestJaccardFile = "src/centrality2/suggest_jaccard.txt";
 
 		String fileSources = "src/livres";
 		String fileSourcesVrac = "/Vrac/livres";
@@ -37,13 +40,24 @@ public class Main {
 		ArrayList<String> files = new ArrayList<>();
 		ArrayList<String> files_pretraiter = new ArrayList<>();
 		List<Livre> livres = new ArrayList<>();
+		
+		File file = new File("src/centrality/id_node.txt"); 
+		  
+		  BufferedReader br = new BufferedReader(new FileReader(file)); 
+		  
+		  String st; 
+		  while ((st = br.readLine()) != null) {
+			  String[] line = st.split(" ");
+			  files.add(fileSourcesVrac+"/"+line[1]);
+			  files_pretraiter.add((fileSourcesVrac+"/"+line[1]).replace(folder, folderPretraiter));
+		  } 
 
-		try (Stream<Path> paths = Files.walk(Paths.get(fileSourcesVrac))) {
-			paths.filter(Files::isRegularFile).parallel().limit(NB_LIVRE).forEach(f -> {
-				files.add(f.toString());
-				files_pretraiter.add(f.toString().replace(folder, folderPretraiter));
-			});
-		}
+//		 try (Stream<Path> paths = Files.walk(Paths.get(fileSourcesVrac))) {
+//			paths.filter(Files::isRegularFile).parallel().limit(NB_LIVRE).forEach(f -> {
+//				files.add(f.toString());
+//				files_pretraiter.add(f.toString().replace(folder, folderPretraiter));
+//			});
+//		}
 
 		Livre.occurences(files, folder, folderPretraiter);
 
