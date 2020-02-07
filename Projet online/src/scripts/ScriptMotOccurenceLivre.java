@@ -61,7 +61,7 @@ public class ScriptMotOccurenceLivre {
 			try {
 				Files.newBufferedReader(Paths.get(f)).lines().forEach(line -> {
 					String[] read = line.split(" ");
-					if(!read[0].contains("--") && read[0].length()>3 && Double.valueOf(read[1])>10.0){
+					if(!read[0].contains("--") && read[0].length()>3 && Double.valueOf(read[1])>60.0){
 						Couple c = new Couple(f.split("/")[3], Double.valueOf(read[1]));
 						if (allMots.keySet().contains(read[0])) {
 							if (allMots.get(read[0]).occu < c.occu) {
