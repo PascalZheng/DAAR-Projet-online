@@ -1,6 +1,9 @@
 package scripts;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,64 +16,72 @@ import java.util.stream.Stream;
 
 import algorithme.Livre;
 
-
 public class ScriptMotOccurenceLivre {
-	
-	static class Couple{
+
+	static class Couple {
 		private double occu;
 		private String livre;
-		
+
 		public Couple(String m, double occu) {
 			this.livre = m;
 			this.occu = occu;
 		}
-		
+
 		@Override
-	    public boolean equals(Object o) { 
-	        if (o == this) { 
-	            return true; 
-	        } 
-	        if (!(o instanceof Couple)) { 
-	            return false; 
-	        } 
-	        Couple c = (Couple) o; 
-	        return c.livre.equals(this.livre); 
-	    } 
+		public boolean equals(Object o) {
+			if (o == this) {
+				return true;
+			}
+			if (!(o instanceof Couple)) {
+				return false;
+			}
+			Couple c = (Couple) o;
+			return c.livre.equals(this.livre);
+		}
 	}
-	
+
 	public static void main(String[] args) throws IOException {
-		String folderPretraiter = "src/livres_pretraiter";
-		
+		String fileSourcesVrac = "/Vrac/livres";
+		String folder = "livres";
+		String folderPretraiter = "livres_pretraiter";
+
+		File file = new File("src/centrality/id_node.txt");
+
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		ArrayList<String> files_pretraiter = new ArrayList<>();
+		String st;
+		while ((st = br.readLine()) != null) {
+			String[] line = st.split(" ");
+			files_pretraiter.add((fileSourcesVrac + "/" + line[1]).replace(folder, folderPretraiter));
+		}
+
 		Map<String, Couple> allMots = new HashMap<>();
 
+		files_pretraiter.stream().forEach(f -> {
+			try {
+				Files.newBufferedReader(Paths.get(f)).lines().forEach(line -> {
+					String[] read = line.split(" ");
+					Couple c = new Couple(f.split("/")[3], Double.valueOf(read[1]));
 
-		try (Stream<Path> paths = Files.walk(Paths.get(folderPretraiter))) {
-			paths.filter(Files::isRegularFile).parallel().forEach(f -> {
-				try {
-					Files.newBufferedReader(Paths.get(f.toString())).lines().forEach(line -> {
-						String[] read = line.split(" ");
-						Couple c = new Couple(f.toString().split("\\\\")[2], Double.valueOf(read[1]) );
-						
-						if(allMots.keySet().contains(read[0])) {
-							if(allMots.get(read[0]).occu < c.occu) {
-								allMots.put(read[0], c);
-							}
-						}else {
+					if (allMots.keySet().contains(read[0])) {
+						if (allMots.get(read[0]).occu < c.occu) {
 							allMots.put(read[0], c);
 						}
-						
-					});
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			});
-		}
-		
+					} else {
+						allMots.put(read[0], c);
+					}
+
+				});
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+
 		try {
 			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/allWords.txt"));
 			String r = "";
 			for (String s : allMots.keySet()) {
-				r += s + " " + allMots.get(s).livre;
+				r += s + " " + allMots.get(s).livre + " " + allMots.get(s).occu;
 				r += "\n";
 				writer2.write(r);
 				r = "";
