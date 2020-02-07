@@ -61,6 +61,12 @@ public class ScriptMotOccurenceLivre {
 			try {
 				Files.newBufferedReader(Paths.get(f)).lines().forEach(line -> {
 					String[] read = line.split(" ");
+					if(read[0].contains.("--")){
+						continue;
+					}
+					if(read[0].length()<2){
+						continue;
+					}
 					Couple c = new Couple(f.split("/")[3], Double.valueOf(read[1]));
 
 					if (allMots.keySet().contains(read[0])) {
@@ -78,7 +84,7 @@ public class ScriptMotOccurenceLivre {
 		});
 
 		try {
-			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/allWords.txt"));
+			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/all_words.txt"));
 			String r = "";
 			for (String s : allMots.keySet()) {
 				r += s + " " + allMots.get(s).livre + " " + allMots.get(s).occu;
