@@ -61,21 +61,18 @@ public class ScriptMotOccurenceLivre {
 			try {
 				Files.newBufferedReader(Paths.get(f)).lines().forEach(line -> {
 					String[] read = line.split(" ");
-					if(read[0].contains.("--")){
-						continue;
-					}
-					if(read[0].length()<2){
-						continue;
-					}
-					Couple c = new Couple(f.split("/")[3], Double.valueOf(read[1]));
-
-					if (allMots.keySet().contains(read[0])) {
-						if (allMots.get(read[0]).occu < c.occu) {
+					if(!read[0].contains("--") && read[0].length()>2){
+						Couple c = new Couple(f.split("/")[3], Double.valueOf(read[1]));
+						if (allMots.keySet().contains(read[0])) {
+							if (allMots.get(read[0]).occu < c.occu) {
+								allMots.put(read[0], c);
+							}
+						} else {
 							allMots.put(read[0], c);
 						}
-					} else {
-						allMots.put(read[0], c);
 					}
+					
+					
 
 				});
 			} catch (IOException e) {
