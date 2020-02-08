@@ -1,4 +1,4 @@
-# DAAR-Projet-online pré calculs
+# DAAR Projet Web partie pré calculs
 
 Ce projet contient tout les algorithmes et les scripts utiliser pour créer les graphes et extraire les informations nécessaire dans la mise en place du site web https://prismaticos-ebe3f.firebaseapp.com/ dans le cadre de l'UE Daar.
 
