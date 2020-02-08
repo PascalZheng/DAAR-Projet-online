@@ -1,5 +1,10 @@
-package algorithme;
+package tools;
 
+/**
+ * Classe qui sert a stoquer une paire id : score
+ * @author Thierno BAH, Pascal Zheng
+ *
+ */
 public class Paire {
 
 	private int id;

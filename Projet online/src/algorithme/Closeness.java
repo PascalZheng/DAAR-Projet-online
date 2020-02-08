@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+/**
+ * Algorithme qui calcul le score de closeness de chaque noeuds d'un graphe a partir de la matrice des plus court chemins
+ * @author Thierno BAH, Pascal Zheng
+ *
+ */
 public class Closeness {
 	public static Map<Integer, Double> closeness(double[][] floydWarshallMat) {
 		int n = floydWarshallMat.length;

@@ -8,6 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import tools.Livre;
+
+/**
+ * Classe qui permet de creer un graphe géométrique en utilisant comme distance la distance de Jaccard
+ * @author Thierno BAH, Pascal ZHENG
+ *
+ */
 public class Graph {
 	private double edgeTreshold;
 	private Map<Integer, HashSet<Integer>> adjArray;

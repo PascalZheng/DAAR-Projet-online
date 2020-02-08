@@ -14,8 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import algorithme.Livre;
+import tools.Livre;
 
+/**
+ * Script qui creer un index avec tous les mots de tous les livres
+ * @author Thierno
+ *
+ */
 public class ScriptMotOccurenceLivre {
 
 	static class Couple {
@@ -45,7 +50,7 @@ public class ScriptMotOccurenceLivre {
 		String folder = "livres";
 		String folderPretraiter = "livres_pretraiter";
 
-		File file = new File("src/centrality/id_node.txt");
+		File file = new File("src/graphe1/id_node.txt");
 
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		ArrayList<String> files_pretraiter = new ArrayList<>();
@@ -62,6 +67,7 @@ public class ScriptMotOccurenceLivre {
 				Files.newBufferedReader(Paths.get(f)).lines().forEach(line -> {
 					String[] read = line.split(" ");
 					if(!read[0].contains("--") && read[0].length()>3 && Double.valueOf(read[1])>100.0){
+						// ici on prend les mots qui apparaisse au moins 100 fois
 						Couple c = new Couple(f.split("/")[3], Double.valueOf(read[1]));
 						if (allMots.keySet().contains(read[0])) {
 							if (allMots.get(read[0]).occu < c.occu) {
@@ -81,7 +87,7 @@ public class ScriptMotOccurenceLivre {
 		});
 
 		try {
-			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/centrality/all_words.txt"));
+			BufferedWriter writer2 = new BufferedWriter(new FileWriter("src/graphe1/all_words.txt"));
 			String r = "";
 			for (String s : allMots.keySet()) {
 				r += s + " " + allMots.get(s).livre + " " + allMots.get(s).occu;

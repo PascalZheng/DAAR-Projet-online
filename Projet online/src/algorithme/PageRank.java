@@ -2,6 +2,11 @@ package algorithme;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
+/**
+ * Algorithme qui calcul le score de pagerank de chaque noeud du graphe
+ * @author Thierno
+ *
+ */
 public class PageRank {
 	private Graph G;
 	private int n;

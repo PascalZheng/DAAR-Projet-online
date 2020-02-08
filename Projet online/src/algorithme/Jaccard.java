@@ -3,6 +3,13 @@ package algorithme;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+import tools.Livre;
+
+/**
+ * Classe qui permet de calculer la distance de Jaccard entre deux indexes de deux livres
+ * @author Thierno BAH, Pascal ZHENG
+ *
+ */
 public class Jaccard {
 
 	public static double distanceJaccard(Livre D1, Livre D2) throws IOException {

@@ -14,10 +14,15 @@ import java.util.stream.Stream;
 
 import algorithme.Closeness;
 import algorithme.Graph;
-import algorithme.Livre;
 import algorithme.Main;
 import algorithme.PageRank;
+import tools.Livre;
 
+/**
+ * Mesure de temps pour un graphe de taille 2000
+ * @author Thierno
+ *
+ */
 public class Test2000 {
 	
 	public static void main(String[] args) throws IOException {

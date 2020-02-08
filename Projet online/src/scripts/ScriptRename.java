@@ -7,6 +7,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+/**
+ * Script qui se charge de renommer les fichiers dans le bon format
+ * @author Thierno BAH, Pascal ZHENG
+ *
+ */
 public class ScriptRename {
 
 	public static void main(String[] args) {

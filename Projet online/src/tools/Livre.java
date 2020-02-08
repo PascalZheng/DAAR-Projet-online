@@ -1,4 +1,4 @@
-package algorithme;
+package tools;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,6 +12,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Classe qui permet de stocker un livre sous forme d'index
+ * @author Thierno BAH, Pascal Zheng
+ *
+ */
 public class Livre {
 
 	private String name;
@@ -44,6 +49,12 @@ public class Livre {
 		this.occurencesMots = occurencesMots;
 	}
 
+	/**
+	 * Transforme un fichier en index
+	 * @param filename nom du fichier a transformer en index
+	 * @return l'index sous forme de HashMap ou les clés sont les mots et les valeurs le nombre d'occurence des mots
+	 * @throws IOException
+	 */
 	public static Map<String, Double> liste(String filename) throws IOException {
 		return Stream.of(Files.lines(Paths.get(filename), Charset.forName("ISO_8859_1"))).flatMap(s -> s).parallel()
 				.map(String::toLowerCase).parallel().map(line -> line.split(" ")).parallel()
@@ -51,6 +62,12 @@ public class Livre {
 
 	}
 
+	/**
+	 * Fonctions qui permets de créer un index d'un livre du dossier folderSrc et qui le mets dans le dossier folderDest 
+	 * @param files noms des fichiers dont l'index doit être crée
+	 * @param folderSrc dossier qui contient les fichiers
+	 * @param folderDest dossier où mettre les index créer
+	 */
 	public static void occurences(ArrayList<String> files, String folderSrc,String folderDest) {
 		files.stream().parallel().forEach(file -> {
 			try {

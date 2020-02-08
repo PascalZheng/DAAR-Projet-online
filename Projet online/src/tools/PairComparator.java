@@ -1,10 +1,14 @@
-package algorithme;
+package tools;
 import java.util.Comparator;
 
+/**
+ * Comparateur entre deux objets Paire
+ * @author Thierno BAH, Pascal Zheng
+ *
+ */
 public class PairComparator implements Comparator<Paire> {
 
-	// Used for sorting in ascending order of
-	// roll number
+
 	public int compare(Paire a, Paire b) {
 		int res = 0;
 		if ((a.getScore() - b.getScore()) > 0.0) {
