@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import tools.Livre;
 
 /**
- * Classe qui permet de calculer la distance de Jaccard entre deux indexes de deux livres
+ * Classe qui permet de calculer la distance de Jaccard entre deux index de deux livres
  * @author Thierno BAH, Pascal ZHENG
  *
  */
